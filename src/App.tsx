@@ -11,8 +11,8 @@ import { QuestionsList } from './components/QuestionsList';
 import { SafetyNote } from './components/SafetyNote';
 import { ExamplesBar } from './components/ExamplesBar';
 import { NotSuitable } from './components/NotSuitable';
+import { ShareModal } from './components/ShareModal';
 import { fetchDevelop } from './lib/llm';
-import { copyText, formatReportAsText } from './lib/format';
 import type { DevelopReport } from './types/report';
 
 type Phase = 'compose' | 'developing' | 'developed';
@@ -32,7 +32,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [sealPressing, setSealPressing] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
-  const [copyStatus, setCopyStatus] = useState<'idle' | 'ok' | 'fail'>('idle');
+  const [shareOpen, setShareOpen] = useState(false);
   const [history, setHistory] = useState<HistoryFrame[]>([]);
   const [followLoading, setFollowLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
@@ -131,13 +131,6 @@ export default function App() {
   function jumpTo(n: number) {
     const el = document.getElementById(`step-${n}`);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  async function onCopy() {
-    if (!report) return;
-    const ok = await copyText(formatReportAsText(text, report));
-    setCopyStatus(ok ? 'ok' : 'fail');
-    setTimeout(() => setCopyStatus('idle'), 2200);
   }
 
   const isEmpty =
@@ -308,8 +301,8 @@ export default function App() {
                 </div>
 
                 <div className="mt-12 mb-4 flex items-center justify-center gap-10 flex-wrap">
-                  <button onClick={onCopy} className="minor-btn">
-                    {copyStatus === 'ok' ? '已 复 制' : copyStatus === 'fail' ? '复 制 失 败' : '复 制 结 果'}
+                  <button onClick={() => setShareOpen(true)} className="minor-btn">
+                    生 成 卡 片
                   </button>
                   <button onClick={reset} className="minor-btn">
                     重 新 写
@@ -319,6 +312,10 @@ export default function App() {
             )}
           </main>
         </div>
+      )}
+
+      {shareOpen && report && !report.notSuitable && (
+        <ShareModal text={text} report={report} onClose={() => setShareOpen(false)} />
       )}
 
       <footer className="py-10 text-center">
