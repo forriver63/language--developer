@@ -20,6 +20,11 @@ type Phase = 'compose' | 'developing' | 'developed';
 const TITLE = '语言显影器';
 const STEP_IDS = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5'];
 
+interface HistoryFrame {
+  text: string;
+  report: DevelopReport;
+}
+
 export default function App() {
   const [text, setText] = useState('');
   const [phase, setPhase] = useState<Phase>('compose');
@@ -28,6 +33,8 @@ export default function App() {
   const [sealPressing, setSealPressing] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [copyStatus, setCopyStatus] = useState<'idle' | 'ok' | 'fail'>('idle');
+  const [history, setHistory] = useState<HistoryFrame[]>([]);
+  const [followLoading, setFollowLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => () => abortRef.current?.abort(), []);
@@ -81,7 +88,44 @@ export default function App() {
     setError(null);
     setPhase('compose');
     setActiveStep(1);
+    setHistory([]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function onFollow(questionIndex: number, answer: string) {
+    if (!report || followLoading) return;
+    const question = report.reflectionQuestions[questionIndex];
+    if (!question) return;
+    const followupPrompt = `[追问]\n原话：${text}\n反思问题：${question}\n我的回应：${answer}`;
+    setFollowLoading(true);
+    const ctl = new AbortController();
+    abortRef.current = ctl;
+    try {
+      const newReport = await fetchDevelop(followupPrompt, ctl.signal);
+      setHistory((h) => [...h, { text, report }]);
+      setText(answer);
+      setReport(newReport);
+      setActiveStep(1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      if ((e as Error).name !== 'AbortError') {
+        setError((e as Error).message);
+      }
+    } finally {
+      setFollowLoading(false);
+    }
+  }
+
+  function goBack() {
+    setHistory((h) => {
+      if (h.length === 0) return h;
+      const prev = h[h.length - 1];
+      setText(prev.text);
+      setReport(prev.report);
+      setActiveStep(1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return h.slice(0, -1);
+    });
   }
 
   function jumpTo(n: number) {
@@ -183,8 +227,15 @@ export default function App() {
           <ProgressRail active={activeStep} onJump={jumpTo} />
 
           <main className="developed-main">
+            {history.length > 0 && (
+              <div className="history-bar">
+                <button onClick={goBack} className="history-back">
+                  ← 返 回 上 一 次（共 {history.length} 步）
+                </button>
+              </div>
+            )}
             <div className="origin-quote">
-              <span className="origin-mark">原</span>
+              <span className="origin-mark">{history.length > 0 ? '续' : '原'}</span>
               <p className="origin-text">{text}</p>
             </div>
 
@@ -244,8 +295,12 @@ export default function App() {
                   {report.reflectionQuestions.length > 0 && (
                     <section className="reflect">
                       <h3 className="reflect-title">继续观察</h3>
-                      <p className="reflect-hint">三到五个结构性追问，不必现在就回答。</p>
-                      <QuestionsList items={report.reflectionQuestions} />
+                      <p className="reflect-hint">点任意一问"接着想"，模型会顺着这条线继续显影。</p>
+                      <QuestionsList
+                        items={report.reflectionQuestions}
+                        onFollow={onFollow}
+                        busy={followLoading}
+                      />
                     </section>
                   )}
 

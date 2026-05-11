@@ -722,6 +722,96 @@ textarea:focus, button:focus, input:focus { outline: none; }
   line-height: 1.8;
 }
 
+/* ────────────────────── question follow-up ────────────────────── */
+.question {
+  display: block;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.question:last-child { border-bottom: none; }
+
+.question-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.question-follow {
+  margin-left: auto;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 1px;
+  transition: all 200ms ease;
+  flex-shrink: 0;
+}
+.question-follow:hover:not([disabled]) {
+  color: var(--vermilion);
+  border-color: var(--vermilion);
+}
+.question-follow[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+.followup {
+  margin-top: 12px;
+  padding: 14px 16px 14px;
+  background: var(--paper-glow);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--vermilion);
+  border-radius: 2px;
+  animation: fade-in 280ms ease-out;
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.followup-input {
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.95;
+  color: var(--ink);
+  resize: vertical;
+  outline: none;
+  border: none;
+  background: transparent;
+}
+.followup-input::placeholder { color: var(--ink-faint); }
+
+.followup-actions {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.brush-btn-small {
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  padding: 4px 10px 6px;
+}
+
+/* ────────────────────── history bar ────────────────────── */
+.history-bar {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+.history-back {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 1px;
+  background: var(--paper-card);
+  transition: all 200ms ease;
+}
+.history-back:hover {
+  color: var(--ink);
+  border-color: var(--vermilion);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .title-char, .reveal, .sheet, .seal-press, .layer { animation: none !important; }
+  .title-char, .reveal, .sheet, .seal-press, .layer, .followup { animation: none !important; }
 }
