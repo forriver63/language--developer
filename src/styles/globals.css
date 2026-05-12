@@ -225,8 +225,8 @@ textarea:focus, button:focus, input:focus { outline: none; }
 .brush-btn[disabled]::before { background: var(--ink-faint); }
 
 .minor-btn {
-  font-size: 11px;
-  letter-spacing: 0.35em;
+  font-size: 12px;
+  letter-spacing: 0.3em;
   color: var(--ink-soft);
   padding: 4px 0;
   border-bottom: 1px solid transparent;
@@ -323,9 +323,9 @@ textarea:focus, button:focus, input:focus { outline: none; }
   grid-row: 1;
 }
 .rail-state {
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  color: var(--ink-faint);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-hint);
   grid-column: 2;
   grid-row: 2;
   margin-top: 2px;
@@ -630,10 +630,11 @@ textarea:focus, button:focus, input:focus { outline: none; }
   margin-top: 18px;
   padding-top: 12px;
   border-top: 1px dashed var(--line-soft);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink-hint);
   text-align: center;
+  line-height: 1.7;
 }
 
 /* ────────────────────── rewrites ────────────────────── */
@@ -683,9 +684,9 @@ textarea:focus, button:focus, input:focus { outline: none; }
   color: var(--ink);
 }
 .rewrite-purpose {
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  color: var(--ink-faint);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-hint);
 }
 .rewrite-text {
   font-size: 15px;
@@ -720,14 +721,14 @@ textarea:focus, button:focus, input:focus { outline: none; }
 }
 .question:last-child { border-bottom: none; }
 .question-num {
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   color: var(--vermilion);
-  width: 26px; flex-shrink: 0;
+  width: 28px; flex-shrink: 0;
 }
 .question-text {
-  font-size: 14px;
-  line-height: 1.95;
+  font-size: 15px;
+  line-height: 1.9;
   color: var(--ink);
 }
 
@@ -788,9 +789,9 @@ textarea:focus, button:focus, input:focus { outline: none; }
   gap: 12px;
 }
 .examples-label {
-  font-size: 11px;
-  letter-spacing: 0.35em;
-  color: var(--ink-faint);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--ink-hint);
 }
 .examples-list {
   display: flex;
@@ -861,9 +862,9 @@ textarea:focus, button:focus, input:focus { outline: none; }
 /* ────────────────────── ICP filing ────────────────────── */
 .icp-tag {
   margin-top: 10px;
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  color: var(--ink-faint);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--ink-hint);
 }
 .icp-tag a {
   color: inherit;
@@ -1029,9 +1030,9 @@ textarea:focus, button:focus, input:focus { outline: none; }
   justify-content: flex-start;
 }
 .history-back {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  color: var(--ink-faint);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--ink-hint);
   padding: 6px 10px;
   border: 1px solid var(--line);
   border-radius: 1px;

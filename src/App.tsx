@@ -359,7 +359,7 @@ export default function App() {
       )}
 
       <footer className="py-10 text-center">
-        <p className="text-[11px] ink-faint tracking-[0.3em] leading-loose max-w-md mx-auto px-4">
+        <p className="text-[12px] tracking-[0.2em] leading-[1.9] max-w-md mx-auto px-4" style={{ color: 'var(--ink-hint)' }}>
           这是一个语言结构分析工具。不评判、不安慰、不替你做决定。<br />
           文字仅在你的浏览器与服务器之间流转，不被存储。
         </p>
