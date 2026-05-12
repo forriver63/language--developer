@@ -1,16 +1,15 @@
 interface Props {
   text: string;
-  depth?: number; // 1 = first, >1 = inside follow-up chain
+  depth?: number;
 }
 
 export function CoreInsight({ text, depth = 1 }: Props) {
   if (!text) return null;
   return (
     <figure className="core-insight">
-      <span className="core-insight-mark">○</span>
       <blockquote className="core-insight-text">{text}</blockquote>
       <figcaption className="core-insight-caption">
-        {depth > 1 ? `第 ${depth} 层显影` : '核 心 显 影'}
+        {depth > 1 ? '再 下 一 层' : '浮 现 的 一 层'}
       </figcaption>
     </figure>
   );
