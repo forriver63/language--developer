@@ -323,9 +323,18 @@ export default function App() {
           这是一个语言结构分析工具。不评判、不安慰、不替你做决定。<br />
           文字仅在你的浏览器与服务器之间流转，不被存储。
         </p>
-        <p className="alpha-tag">
-          Alpha version · 仍在实验中，欢迎反馈哪些地方显影过度或不够准确。
-        </p>
+        <div className="alpha-banner">
+          <span className="alpha-banner-dot" />
+          <span className="alpha-banner-text">
+            <strong>Alpha</strong>　仍在实验中　·　欢迎反馈：
+            <a
+              href="mailto:1946726864@qq.com?subject=语言显影器反馈"
+              className="alpha-banner-mail"
+            >
+              1946726864@qq.com
+            </a>
+          </span>
+        </div>
       </footer>
     </div>
   );
