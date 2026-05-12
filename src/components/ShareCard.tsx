@@ -65,7 +65,9 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ text, report, pref
 
       <footer className="card-foot">
         <span className="card-foot-line">语言显影器　·　帮你看见语言结构</span>
-        <span className="card-foot-url">language-developer.vercel.app</span>
+        <span className="card-foot-url">
+          {import.meta.env.VITE_SITE_DOMAIN ?? 'language-developer.vercel.app'}
+        </span>
       </footer>
     </div>
   );

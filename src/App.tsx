@@ -323,6 +323,17 @@ export default function App() {
           这是一个语言结构分析工具。不评判、不安慰、不替你做决定。<br />
           文字仅在你的浏览器与服务器之间流转，不被存储。
         </p>
+        {import.meta.env.VITE_ICP_NUMBER && (
+          <p className="icp-tag">
+            <a
+              href="https://beian.miit.gov.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {import.meta.env.VITE_ICP_NUMBER}
+            </a>
+          </p>
+        )}
         <div className="alpha-banner">
           <span className="alpha-banner-dot" />
           <span className="alpha-banner-text">

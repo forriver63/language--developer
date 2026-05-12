@@ -708,6 +708,24 @@ textarea:focus, button:focus, input:focus { outline: none; }
   line-height: 1.85;
 }
 
+/* ────────────────────── ICP filing ────────────────────── */
+.icp-tag {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+}
+.icp-tag a {
+  color: inherit;
+  border-bottom: 1px dotted var(--line);
+  padding-bottom: 1px;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+.icp-tag a:hover {
+  color: var(--ink-soft);
+  border-bottom-color: var(--ink-soft);
+}
+
 /* ────────────────────── alpha banner ────────────────────── */
 .alpha-banner {
   display: inline-flex;
