@@ -1,11 +1,25 @@
 import { develop } from '../lib/develop-core';
+import { checkRate, getClientIp } from '../lib/ratelimit';
 
 export const config = { runtime: 'edge' };
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return new Response('method not allowed', { status: 405 });
   const apiKey = process.env.DEEPSEEK_API_KEY;
-  if (!apiKey) return new Response('LLM not configured', { status: 503 });
+  if (!apiKey) return new Response('LLM 未配置', { status: 503 });
+
+  const ip = getClientIp(req);
+  const rate = await checkRate(ip);
+  if (!rate.ok) {
+    const msg =
+      rate.reason === 'ip'
+        ? '你这一小时的次数用完了，先去歇歇，下个整点再来。'
+        : '今天的总额度已经用完，明天再来 :)';
+    return new Response(msg, {
+      status: 429,
+      headers: { 'Retry-After': String(rate.retryAfterSec) },
+    });
+  }
 
   let text = '';
   try {
