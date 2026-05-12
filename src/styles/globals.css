@@ -950,22 +950,28 @@ textarea:focus, button:focus, input:focus { outline: none; }
 }
 .question-follow-link {
   align-self: flex-start;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  color: var(--ink-faint);
-  padding: 2px 0;
-  margin-top: 2px;
-  border-bottom: 1px dashed transparent;
-  transition: all 240ms ease;
-  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px 12px 6px;
+  background: rgba(162, 58, 42, 0.06);
+  border: 1px dashed rgba(162, 58, 42, 0.5);
+  border-radius: 2px;
+  color: var(--vermilion);
+  font-size: 12.5px;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  transition: all 220ms ease;
   text-align: left;
 }
 .question-follow-link:hover:not([disabled]) {
-  color: var(--vermilion);
-  border-bottom-color: var(--vermilion);
-  transform: translateX(4px);
+  background: rgba(162, 58, 42, 0.12);
+  border-style: solid;
+  border-color: var(--vermilion);
+  transform: translateX(3px);
 }
-.question-follow-link[disabled] { opacity: 0.35; cursor: not-allowed; }
+.question-follow-link[disabled] { opacity: 0.4; cursor: not-allowed; }
 
 .followup {
   margin-top: 14px;

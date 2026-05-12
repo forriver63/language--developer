@@ -327,7 +327,7 @@ export default function App() {
                     <section className="reflect">
                       <h3 className="reflect-title">继续观察</h3>
                       <p className="reflect-hint">
-                        每一问后面有一条"→ 顺着这条线继续往下"——点开来写几个字，模型会沿着原链条往下一层走。
+                        任选一问，点下面的虚框写几个字——模型会沿着这条线继续往下一层。
                       </p>
                       <QuestionsList
                         items={report.reflectionQuestions}
