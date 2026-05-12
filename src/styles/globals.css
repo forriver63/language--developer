@@ -386,6 +386,116 @@ textarea:focus, button:focus, input:focus { outline: none; }
   background: var(--ink-soft);
 }
 
+/* ────────────────────── chain breadcrumb（已走过的路径） ────────────────────── */
+.breadcrumb {
+  margin: 16px 0 28px;
+  padding: 20px 22px 22px;
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  animation: anchor-in 700ms cubic-bezier(.2,.7,.2,1);
+}
+.breadcrumb-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.breadcrumb-label {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--vermilion);
+}
+.breadcrumb-count {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--ink-hint);
+}
+
+.breadcrumb-thread {
+  position: relative;
+  padding-left: 18px;
+}
+.breadcrumb-thread::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--vermilion) 0%, var(--vermilion) 70%, transparent 100%);
+  opacity: 0.45;
+}
+
+.breadcrumb-step {
+  position: relative;
+  padding: 8px 0;
+}
+.breadcrumb-step + .breadcrumb-step { padding-top: 12px; }
+
+.breadcrumb-marker {
+  position: absolute;
+  left: -18px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  border: 1px solid var(--vermilion);
+  border-radius: 50%;
+  color: var(--vermilion);
+  font-size: 10px;
+  font-family: "Songti SC", serif;
+}
+.breadcrumb-step.is-origin .breadcrumb-marker {
+  background: var(--vermilion);
+  color: var(--paper);
+  border-color: var(--vermilion-dim);
+}
+.breadcrumb-step.is-trigger .breadcrumb-marker {
+  background: var(--paper);
+  color: var(--ink-hint);
+  border-color: var(--ink-hint);
+  border-style: dashed;
+}
+
+.breadcrumb-content { padding-left: 12px; }
+.breadcrumb-tier {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--ink-hint);
+  margin-bottom: 4px;
+}
+.breadcrumb-text {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+}
+.breadcrumb-insight {
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--ink);
+  letter-spacing: 0.03em;
+}
+.breadcrumb-reply {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--ink-hint);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+.breadcrumb-question {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  font-style: italic;
+}
+
 /* ────────────────────── core insight（被轻轻看见的一句话） ────────────────────── */
 .core-insight {
   margin: 14px auto 8px;

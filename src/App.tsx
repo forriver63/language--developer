@@ -4,6 +4,7 @@ import { ProgressRail } from './components/ProgressRail';
 import { Step } from './components/Step';
 import { CoreInsight } from './components/CoreInsight';
 import { IntroPanel } from './components/IntroPanel';
+import { ChainBreadcrumb } from './components/ChainBreadcrumb';
 import { OverviewView } from './components/OverviewView';
 import { LayeredChainView } from './components/LayeredChainView';
 import { LeapsView } from './components/LeapsView';
@@ -253,6 +254,10 @@ export default function App() {
               <span className="origin-mark">{depth > 1 ? '续' : '原'}</span>
               <p className="origin-text">{text}</p>
             </div>
+
+            {chainMemory && chainMemory.path.length > 0 && (
+              <ChainBreadcrumb chainMemory={chainMemory} />
+            )}
 
             {isEmpty ? (
               <p className="text-sm ink-soft text-center py-8">这段话里没有明显的语言结构需要拆解。</p>
