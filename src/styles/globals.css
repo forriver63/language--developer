@@ -9,6 +9,7 @@
   --paper-card:   #fbf6ea;
   --ink:          #1a1410;
   --ink-soft:     #5a504a;
+  --ink-hint:     #7a6f64;
   --ink-faint:    #a89e90;
   --line:         #d6ccb8;
   --line-soft:    #e4dcc8;
@@ -165,7 +166,7 @@ textarea:focus, button:focus, input:focus { outline: none; }
   margin: 0 0 10px;
 }
 .intro-panel-body p:last-child { margin-bottom: 0; }
-.intro-panel-dim { color: var(--ink-faint); letter-spacing: 0.1em; }
+.intro-panel-dim { color: var(--ink-hint); letter-spacing: 0.06em; }
 
 .intro-panel-toggle {
   margin-top: 12px;
@@ -472,10 +473,11 @@ textarea:focus, button:focus, input:focus { outline: none; }
   line-height: 1.4;
 }
 .step-doing {
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  color: var(--ink-faint);
-  margin-top: 4px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink-hint);
+  margin-top: 6px;
+  line-height: 1.7;
 }
 
 /* ────────────────────── overview ────────────────────── */
@@ -524,9 +526,9 @@ textarea:focus, button:focus, input:focus { outline: none; }
   color: var(--paper);
 }
 .layer-note {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--ink-faint);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-hint);
   text-align: right;
 }
 .layer-text {
@@ -587,7 +589,7 @@ textarea:focus, button:focus, input:focus { outline: none; }
   font-size: 16px;
 }
 .leap-why {
-  font-size: 13px;
+  font-size: 13.5px;
   line-height: 1.85;
   color: var(--ink-soft);
 }
@@ -620,7 +622,7 @@ textarea:focus, button:focus, input:focus { outline: none; }
   font-size: 15px;
 }
 .binding-explain {
-  font-size: 13px;
+  font-size: 13.5px;
   line-height: 1.85;
   color: var(--ink-soft);
 }
@@ -704,10 +706,11 @@ textarea:focus, button:focus, input:focus { outline: none; }
   margin-bottom: 4px;
 }
 .reflect-hint {
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  color: var(--ink-faint);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink-hint);
   margin-bottom: 14px;
+  line-height: 1.7;
 }
 .questions { list-style: none; padding: 0; margin: 0; }
 .question {
@@ -983,10 +986,11 @@ textarea:focus, button:focus, input:focus { outline: none; }
   animation: fade-in 280ms ease-out;
 }
 .followup-prompt {
-  font-size: 12px;
-  letter-spacing: 0.15em;
+  font-size: 13px;
+  letter-spacing: 0.04em;
   color: var(--ink-soft);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  line-height: 1.7;
 }
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(-4px); }
