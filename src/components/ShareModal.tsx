@@ -9,7 +9,7 @@ interface Props {
   onClose: () => void;
 }
 
-const LEVELS = ['深度重构', '中度重构', '行动型重构', '轻度重构'];
+const LEVELS = ['轻度重构', '中度重构', '深度重构', '行动型重构'];
 
 export function ShareModal({ text, report, onClose }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);
