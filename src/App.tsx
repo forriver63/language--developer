@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Seal } from './components/Seal';
 import { ProgressRail } from './components/ProgressRail';
 import { Step } from './components/Step';
+import { CoreInsight } from './components/CoreInsight';
+import { IntroPanel } from './components/IntroPanel';
 import { OverviewView } from './components/OverviewView';
 import { LayeredChainView } from './components/LayeredChainView';
 import { LeapsView } from './components/LeapsView';
@@ -13,7 +15,7 @@ import { ExamplesBar } from './components/ExamplesBar';
 import { NotSuitable } from './components/NotSuitable';
 import { ShareModal } from './components/ShareModal';
 import { fetchDevelop } from './lib/llm';
-import type { DevelopReport } from './types/report';
+import type { ChainMemory, ChainStep, DevelopReport } from './types/report';
 
 type Phase = 'compose' | 'developing' | 'developed';
 
@@ -23,6 +25,7 @@ const STEP_IDS = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5'];
 interface HistoryFrame {
   text: string;
   report: DevelopReport;
+  chainMemory: ChainMemory | null;
 }
 
 export default function App() {
@@ -33,6 +36,7 @@ export default function App() {
   const [sealPressing, setSealPressing] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [shareOpen, setShareOpen] = useState(false);
+  const [chainMemory, setChainMemory] = useState<ChainMemory | null>(null);
   const [history, setHistory] = useState<HistoryFrame[]>([]);
   const [followLoading, setFollowLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
@@ -66,6 +70,8 @@ export default function App() {
     setTimeout(() => setSealPressing(false), 600);
     setError(null);
     setReport(null);
+    setChainMemory(null);
+    setHistory([]);
     setPhase('developing');
     const ctl = new AbortController();
     abortRef.current = ctl;
@@ -85,10 +91,11 @@ export default function App() {
     abortRef.current?.abort();
     setText('');
     setReport(null);
+    setChainMemory(null);
+    setHistory([]);
     setError(null);
     setPhase('compose');
     setActiveStep(1);
-    setHistory([]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -96,15 +103,30 @@ export default function App() {
     if (!report || followLoading) return;
     const question = report.reflectionQuestions[questionIndex];
     if (!question) return;
-    const followupPrompt = `[追问]\n原话：${text}\n反思问题：${question}\n我的回应：${answer}`;
+
+    // build chain memory: previous memory + the current frame
+    const previousPath: ChainStep[] = chainMemory?.path ?? [];
+    const originalInput = chainMemory?.originalInput ?? text;
+    const thisStep: ChainStep = {
+      text,
+      coreInsight: report.coreInsight,
+      summary: report.chainSummary,
+    };
+    const nextChain: ChainMemory = {
+      originalInput,
+      path: [...previousPath, thisStep],
+      triggerQuestion: question,
+    };
+
     setFollowLoading(true);
     const ctl = new AbortController();
     abortRef.current = ctl;
     try {
-      const newReport = await fetchDevelop(followupPrompt, ctl.signal);
-      setHistory((h) => [...h, { text, report }]);
+      const newReport = await fetchDevelop(answer, ctl.signal, nextChain);
+      setHistory((h) => [...h, { text, report, chainMemory }]);
       setText(answer);
       setReport(newReport);
+      setChainMemory(nextChain);
       setActiveStep(1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e) {
@@ -122,6 +144,7 @@ export default function App() {
       const prev = h[h.length - 1];
       setText(prev.text);
       setReport(prev.report);
+      setChainMemory(prev.chainMemory);
       setActiveStep(1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return h.slice(0, -1);
@@ -139,6 +162,8 @@ export default function App() {
     report.layeredChain.length === 0 &&
     report.leaps.length === 0 &&
     report.rewrites.length === 0;
+
+  const depth = (chainMemory?.path?.length ?? 0) + 1;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -160,11 +185,7 @@ export default function App() {
 
       {phase === 'compose' && (
         <main className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 pb-16">
-          <p className="intro">
-            输入一句让你卡住的话，显影器会拆出其中的<strong>推导链</strong>、<strong>隐藏前提</strong>和<strong>绑定关系</strong>
-            <br />
-            <span className="intro-soft">不判断对错 · 不做心理咨询 · 不做宗教解释——只是帮你看见语言结构</span>
-          </p>
+          <IntroPanel />
 
           <div className="sheet sheet-compose px-8 sm:px-12 py-10 sm:py-12">
             <textarea
@@ -223,12 +244,13 @@ export default function App() {
             {history.length > 0 && (
               <div className="history-bar">
                 <button onClick={goBack} className="history-back">
-                  ← 返 回 上 一 次（共 {history.length} 步）
+                  ← 返 回 上 一 次（已展开 {history.length} 层）
                 </button>
               </div>
             )}
-            <div className="origin-quote">
-              <span className="origin-mark">{history.length > 0 ? '续' : '原'}</span>
+
+            <div className={`origin-quote ${depth > 1 ? 'origin-quote-cont' : ''}`}>
+              <span className="origin-mark">{depth > 1 ? '续' : '原'}</span>
               <p className="origin-text">{text}</p>
             </div>
 
@@ -236,8 +258,20 @@ export default function App() {
               <p className="text-sm ink-soft text-center py-8">这段话里没有明显的语言结构需要拆解。</p>
             ) : (
               <>
+                <CoreInsight text={report.coreInsight} depth={depth} />
+
+                <div className="step-divider" aria-hidden>
+                  <span />
+                </div>
+
                 <div className="reveal step-flow">
-                  <Step id="step-1" index={1} title="总览显影" doing="一句话指出这段话的核心推导。">
+                  <Step
+                    id="step-1"
+                    index={1}
+                    title="总览显影"
+                    doing="一句话指出这段话的核心推导。"
+                    stagger={0}
+                  >
                     <OverviewView overview={report.overview} />
                   </Step>
 
@@ -247,6 +281,7 @@ export default function App() {
                       index={2}
                       title="层级链条"
                       doing="把一句话拆成事件 → 解释 → 价值 → 存在/行动 几个层。"
+                      stagger={1}
                     >
                       <LayeredChainView chain={report.layeredChain} />
                     </Step>
@@ -258,6 +293,7 @@ export default function App() {
                       index={3}
                       title="关键跳跃"
                       doing="指出哪几步是语言制造的跳跃，不是事实本身。"
+                      stagger={2}
                     >
                       <LeapsView leaps={report.leaps} />
                     </Step>
@@ -269,6 +305,7 @@ export default function App() {
                       index={4}
                       title="绑定关系"
                       doing="找出被语言焊接在一起、但未必天然成立的对象。"
+                      stagger={3}
                     >
                       <BindingsView bindings={report.bindings} />
                     </Step>
@@ -280,6 +317,7 @@ export default function App() {
                       index={5}
                       title="分层重构"
                       doing="按递进顺序给出四种重写，从减压到具体行动。"
+                      stagger={4}
                     >
                       <RewritesView rewrites={report.rewrites} />
                     </Step>
@@ -288,7 +326,9 @@ export default function App() {
                   {report.reflectionQuestions.length > 0 && (
                     <section className="reflect">
                       <h3 className="reflect-title">继续观察</h3>
-                      <p className="reflect-hint">点任意一问"接着想"，模型会顺着这条线继续显影。</p>
+                      <p className="reflect-hint">
+                        每一问后面有一条"→ 顺着这条线继续往下"——点开来写几个字，模型会沿着原链条往下一层走。
+                      </p>
                       <QuestionsList
                         items={report.reflectionQuestions}
                         onFollow={onFollow}

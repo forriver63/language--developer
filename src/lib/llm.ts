@@ -1,10 +1,14 @@
-import type { DevelopReport } from '../types/report';
+import type { ChainMemory, DevelopReport } from '../types/report';
 
-export async function fetchDevelop(text: string, signal?: AbortSignal): Promise<DevelopReport> {
+export async function fetchDevelop(
+  text: string,
+  signal?: AbortSignal,
+  chainMemory?: ChainMemory
+): Promise<DevelopReport> {
   const r = await fetch('/api/develop', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, ...(chainMemory ? { chainMemory } : {}) }),
     signal,
   });
   if (!r.ok) {

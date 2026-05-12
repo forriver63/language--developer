@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { develop } from './lib/develop-core';
+import { develop, type ChainMemory } from './lib/develop-core';
 import { checkRate, getClientIp } from './lib/ratelimit';
 
 function devApiPlugin(): PluginOption {
@@ -37,8 +37,13 @@ function devApiPlugin(): PluginOption {
         let raw = '';
         for await (const c of req) raw += c.toString();
         let text = '';
+        let chainMemory: ChainMemory | undefined;
         try {
-          text = String(JSON.parse(raw).text ?? '').trim();
+          const body = JSON.parse(raw);
+          text = String(body.text ?? '').trim();
+          if (body.chainMemory && typeof body.chainMemory === 'object') {
+            chainMemory = body.chainMemory as ChainMemory;
+          }
         } catch {
           res.statusCode = 400;
           res.end('invalid body');
@@ -50,7 +55,7 @@ function devApiPlugin(): PluginOption {
           return;
         }
         try {
-          const report = await develop(text, apiKey);
+          const report = await develop(text, apiKey, undefined, chainMemory);
           res.setHeader('Content-Type', 'application/json; charset=utf-8');
           res.end(JSON.stringify(report));
         } catch (e) {

@@ -6,6 +6,12 @@ interface Props {
   busy?: boolean;
 }
 
+const CONTINUE_PHRASES = [
+  '顺着这条线继续往下',
+  '再往下一层',
+  '看看这层下面还有什么',
+];
+
 export function QuestionsList({ items, onFollow, busy }: Props) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [answer, setAnswer] = useState('');
@@ -31,49 +37,57 @@ export function QuestionsList({ items, onFollow, busy }: Props) {
 
   return (
     <ol className="questions">
-      {items.map((q, i) => (
-        <li key={i} className="question">
-          <div className="question-main">
-            <span className="question-num">{String(i + 1).padStart(2, '0')}</span>
-            <span className="question-text">{q}</span>
-            {onFollow && openIdx !== i && (
-              <button
-                className="question-follow"
-                onClick={() => open(i)}
-                disabled={busy}
-                title="顺着这一问继续显影"
-              >
-                接 着 想　→
-              </button>
-            )}
-          </div>
-          {openIdx === i && (
-            <div className="followup">
-              <textarea
-                className="followup-input"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                placeholder="顺着这一问，写下你的想法——可以只是几个字。"
-                rows={3}
-                autoFocus
-                maxLength={1500}
-              />
-              <div className="followup-actions">
-                <button onClick={cancel} className="minor-btn" disabled={busy}>
-                  取 消
-                </button>
-                <button
-                  onClick={() => submit(i)}
-                  disabled={!answer.trim() || busy}
-                  className="brush-btn brush-btn-small"
-                >
-                  {busy ? '显　影　中' : '继　续　显　影'}
-                </button>
+      {items.map((q, i) => {
+        const phrase = CONTINUE_PHRASES[i % CONTINUE_PHRASES.length];
+        return (
+          <li key={i} className="question">
+            <div className="question-main">
+              <span className="question-num">{String(i + 1).padStart(2, '0')}</span>
+              <div className="question-body">
+                <span className="question-text">{q}</span>
+                {onFollow && openIdx !== i && (
+                  <button
+                    className="question-follow-link"
+                    onClick={() => open(i)}
+                    disabled={busy}
+                  >
+                    → {phrase}
+                  </button>
+                )}
               </div>
             </div>
-          )}
-        </li>
-      ))}
+            {openIdx === i && (
+              <div className="followup">
+                <div className="followup-prompt">
+                  顺着这一问，写下你看到的——
+                  <span className="ink-faint">几个字也可以。</span>
+                </div>
+                <textarea
+                  className="followup-input"
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  placeholder="……"
+                  rows={3}
+                  autoFocus
+                  maxLength={1500}
+                />
+                <div className="followup-actions">
+                  <button onClick={cancel} className="minor-btn" disabled={busy}>
+                    取 消
+                  </button>
+                  <button
+                    onClick={() => submit(i)}
+                    disabled={!answer.trim() || busy}
+                    className="brush-btn brush-btn-small"
+                  >
+                    {busy ? '正 在 展 开…' : '再 往 下 一 层'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </li>
+        );
+      })}
     </ol>
   );
 }

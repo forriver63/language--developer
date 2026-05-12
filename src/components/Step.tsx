@@ -6,13 +6,18 @@ interface Props {
   id: string;
   index: number; // 1..5
   title: string;
-  doing: string; // "这一层在做什么"
+  doing: string;
+  stagger?: number; // 0..N, used for entrance delay
   children: ReactNode;
 }
 
-export function Step({ id, index, title, doing, children }: Props) {
+export function Step({ id, index, title, doing, stagger = 0, children }: Props) {
   return (
-    <section id={id} className="step">
+    <section
+      id={id}
+      className="step"
+      style={{ animationDelay: `${stagger * 120}ms` }}
+    >
       <header className="step-head">
         <span className="step-num">{CHIN[index - 1]}</span>
         <div>

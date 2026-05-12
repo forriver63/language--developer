@@ -1,4 +1,4 @@
-import { develop } from '../lib/develop-core';
+import { develop, type ChainMemory } from '../lib/develop-core';
 import { checkRate, getClientIp } from '../lib/ratelimit';
 
 export const config = { runtime: 'edge' };
@@ -22,9 +22,13 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   let text = '';
+  let chainMemory: ChainMemory | undefined;
   try {
     const body = await req.json();
     text = String(body.text ?? '').trim();
+    if (body.chainMemory && typeof body.chainMemory === 'object') {
+      chainMemory = body.chainMemory as ChainMemory;
+    }
   } catch {
     return new Response('invalid body', { status: 400 });
   }
@@ -32,7 +36,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (text.length > 4000) return new Response('text too long', { status: 413 });
 
   try {
-    const report = await develop(text, apiKey, req.signal);
+    const report = await develop(text, apiKey, req.signal, chainMemory);
     return new Response(JSON.stringify(report), {
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
     });

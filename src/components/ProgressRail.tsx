@@ -15,20 +15,24 @@ const CHIN = ['一', '二', '三', '四', '五'];
 
 export function ProgressRail({ active, onJump }: Props) {
   return (
-    <aside className="rail" aria-hidden={false}>
+    <aside className="rail" aria-label="显影进度">
       <div className="rail-inner">
+        <div className="rail-caption">显 影 进 度</div>
         <div className="rail-line" />
         {STEPS.map((s, i) => {
           const isActive = active === s.n;
           const past = active > s.n;
+          const stateText = isActive ? '正在展开' : past ? '已显影' : '未到';
           return (
             <button
               key={s.n}
               className={`rail-step ${isActive ? 'is-active' : ''} ${past ? 'is-past' : ''}`}
               onClick={() => onJump(s.n)}
+              aria-current={isActive ? 'step' : undefined}
             >
               <span className="rail-num">{CHIN[i]}</span>
               <span className="rail-label">{s.label}</span>
+              <span className="rail-state">{stateText}</span>
             </button>
           );
         })}

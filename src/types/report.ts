@@ -23,13 +23,26 @@ export interface Rewrite {
 }
 export interface DevelopReport {
   notSuitable?: string;
+  coreInsight: string;
   overview: Overview;
   layeredChain: LayerNode[];
   leaps: Leap[];
   bindings: Binding[];
   rewrites: Rewrite[];
   reflectionQuestions: string[];
+  chainSummary: string;
   safetyNote?: string;
+}
+
+export interface ChainStep {
+  text: string;
+  coreInsight: string;
+  summary: string;
+}
+export interface ChainMemory {
+  originalInput: string;
+  path: ChainStep[];
+  triggerQuestion?: string;
 }
 
 export const LAYER_COLOR: Record<string, string> = {
