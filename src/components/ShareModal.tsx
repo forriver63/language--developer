@@ -4,14 +4,16 @@ import { ShareCard } from './ShareCard';
 import type { DevelopReport } from '../types/report';
 
 interface Props {
-  text: string;
+  text: string;          // 原文（首句 / chain 起点）
   report: DevelopReport;
   onClose: () => void;
+  depth?: number;
+  latestText?: string;   // chain 中用户最近一次的输入
 }
 
 const LEVELS = ['轻度重构', '中度重构', '深度重构', '行动型重构'];
 
-export function ShareModal({ text, report, onClose }: Props) {
+export function ShareModal({ text, report, onClose, depth = 1, latestText }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [dataUrl, setDataUrl] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -42,7 +44,7 @@ export function ShareModal({ text, report, onClose }: Props) {
         });
     }, 80);
     return () => clearTimeout(timer);
-  }, [text, report, level]);
+  }, [text, report, level, depth, latestText]);
 
   function download() {
     if (!dataUrl) return;
@@ -69,7 +71,14 @@ export function ShareModal({ text, report, onClose }: Props) {
   return (
     <div className="share-overlay" onClick={onClose}>
       <div className="share-card-stage" aria-hidden>
-        <ShareCard ref={cardRef} text={text} report={report} preferredLevel={level} />
+        <ShareCard
+          ref={cardRef}
+          text={text}
+          report={report}
+          preferredLevel={level}
+          depth={depth}
+          latestText={latestText}
+        />
       </div>
 
       <div className="share-modal" onClick={(e) => e.stopPropagation()}>

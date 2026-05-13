@@ -360,7 +360,13 @@ export default function App() {
       )}
 
       {shareOpen && report && !report.notSuitable && (
-        <ShareModal text={text} report={report} onClose={() => setShareOpen(false)} />
+        <ShareModal
+          text={chainMemory?.originalInput ?? text}
+          latestText={chainMemory ? text : undefined}
+          depth={depth}
+          report={report}
+          onClose={() => setShareOpen(false)}
+        />
       )}
 
       <footer className="py-10 text-center">
