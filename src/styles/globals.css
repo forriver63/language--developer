@@ -32,9 +32,11 @@
 * { box-sizing: border-box; }
 
 html, body, #root { min-height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
+  -webkit-tap-highlight-color: rgba(162, 58, 42, 0.08);
   background:
     radial-gradient(120% 80% at 50% -20%, var(--paper-glow) 0%, var(--paper) 50%, var(--paper-deep) 100%);
   color: var(--ink);
@@ -1422,4 +1424,184 @@ textarea:focus, button:focus, input:focus { outline: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .title-char, .reveal, .sheet, .seal-press, .layer, .followup, .share-overlay { animation: none !important; }
+}
+
+/* ════════════════════════════════════════════════════════
+   移动端优化（≤ 640px）— 不影响桌面
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* 标题 / 副标 */
+  .title {
+    font-size: 2.2rem;
+    letter-spacing: 0.36em;
+    padding-right: 0.36em;
+  }
+  .subtitle {
+    font-size: 10.5px;
+    letter-spacing: 0.4em;
+    margin-top: 0.9rem;
+  }
+
+  /* 引导文 + intro 卷帘 */
+  .intro {
+    font-size: 13.5px;
+    line-height: 1.95;
+    margin-bottom: 18px;
+  }
+  .intro-soft { font-size: 11.5px; letter-spacing: 0.12em; }
+  .intro-panel.is-open { padding: 18px 16px 14px; }
+  .intro-panel-body p { font-size: 13.5px; line-height: 1.95; }
+
+  /* Sheet（输入卡） */
+  .sheet { padding: 28px 22px !important; }
+  .sheet-compose::before { left: 14px; top: 24px; bottom: 24px; }
+  .sheet-compose::after  { left: 18px; top: 24px; bottom: 24px; }
+
+  /* 主按钮（显影）— 触摸目标加大到 44px */
+  .brush-btn {
+    padding: 11px 18px 13px;
+    font-size: 1rem;
+    letter-spacing: 0.4em;
+  }
+
+  /* 次级按钮（重新写 / 复制 / 接着想 ...）— 触摸友好 */
+  .minor-btn {
+    padding: 10px 6px;
+    font-size: 12.5px;
+  }
+
+  /* 示例按钮 */
+  .examples-list { gap: 6px; }
+  .example-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.55;
+    max-width: 100%;
+  }
+
+  /* 原文小卡 */
+  .origin-quote { padding: 12px 14px 12px 22px; }
+  .origin-text { font-size: 14.5px; line-height: 1.9; }
+
+  /* 核心显影锚点 */
+  .core-insight {
+    padding: 14px 14px 10px;
+    margin: 10px auto 6px;
+    max-width: 100%;
+  }
+  .core-insight-text { font-size: 15.5px; letter-spacing: 0.04em; }
+  .core-insight-caption { font-size: 10px; letter-spacing: 0.4em; }
+
+  /* Step 卡片 — 紧凑 */
+  .step { padding: 16px 14px 18px; }
+  .step-flow > * + * { margin-top: 22px; }
+  .step-head { gap: 10px; padding-bottom: 10px; margin-bottom: 12px; }
+  .step-num { width: 28px; height: 28px; font-size: 13px; }
+  .step-title { font-size: 1rem; letter-spacing: 0.22em; }
+  .step-doing { font-size: 12.5px; }
+
+  /* Breadcrumb — 紧凑 */
+  .breadcrumb { padding: 16px 14px 18px; margin: 12px 0 22px; }
+  .breadcrumb-thread { padding-left: 16px; }
+  .breadcrumb-thread::before { left: 7px; }
+  .breadcrumb-marker { left: -16px; width: 14px; height: 14px; font-size: 9px; }
+  .breadcrumb-content { padding-left: 10px; }
+  .breadcrumb-text { font-size: 13.5px; line-height: 1.8; }
+  .breadcrumb-insight { font-size: 14px; line-height: 1.8; }
+  .breadcrumb-reply { font-size: 12.5px; }
+  .breadcrumb-question { font-size: 13px; }
+
+  /* 层级链条 — 让 note 在小屏换行到 layer-name 下面 */
+  .layer { padding: 10px 12px; }
+  .layer-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .layer-note { text-align: left; }
+  .layer-text { font-size: 14.5px; line-height: 1.7; }
+
+  /* 跳跃 */
+  .leap-chip { font-size: 13px; padding: 4px 8px; }
+  .leap-why { font-size: 13px; line-height: 1.85; }
+
+  /* 绑定 */
+  .binding-chip { font-size: 13px; padding: 3px 10px; }
+  .binding-explain { font-size: 13px; }
+
+  /* 重构卡 — 紧凑 */
+  .rewrite { gap: 12px; padding-bottom: 18px; }
+  .rewrite-tag { width: 30px; height: 30px; font-size: 15px; }
+  .rewrite-meta { gap: 8px; flex-wrap: wrap; }
+  .rewrite-level { font-size: 13px; letter-spacing: 0.12em; }
+  .rewrite-purpose { font-size: 12px; }
+  .rewrite-text { font-size: 14.5px; line-height: 1.95; }
+
+  /* 反思问题 */
+  .reflect-title { font-size: 13px; letter-spacing: 0.32em; }
+  .reflect-hint { font-size: 12.5px; }
+  .question-num { width: 24px; font-size: 11.5px; }
+  .question-text { font-size: 14.5px; line-height: 1.85; }
+
+  /* 接着想入口 — 触摸友好 */
+  .question-follow-link {
+    padding: 8px 12px 9px;
+    font-size: 12.5px;
+    margin-top: 8px;
+  }
+
+  /* 追问输入框 — iOS 16px 防止聚焦缩放 */
+  .followup { padding: 12px 14px; }
+  .followup-prompt { font-size: 12.5px; }
+  .followup-input { font-size: 16px; line-height: 1.85; }
+  .brush-btn-small {
+    font-size: 13px;
+    padding: 8px 14px 9px;
+  }
+
+  /* 安全提示 */
+  .safety { padding: 14px 14px 14px 16px; gap: 10px; }
+  .safety-text { font-size: 12.5px; line-height: 1.9; }
+
+  /* History 返回栏 */
+  .history-back { font-size: 11.5px; padding: 8px 12px; }
+
+  /* Alpha banner — 紧凑 */
+  .alpha-banner {
+    padding: 7px 12px 8px;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .alpha-banner-mail { font-size: 10.5px; }
+
+  /* Share Modal */
+  .share-overlay { padding: 10px; }
+  .share-modal { padding: 18px 16px 20px; max-height: 90vh; }
+  .share-modal-title { font-size: 13px; letter-spacing: 0.3em; }
+  .share-level-tabs { flex-wrap: wrap; justify-content: center; padding: 2px; }
+  .share-level-tab { font-size: 11.5px; padding: 5px 10px; letter-spacing: 0.06em; }
+  .share-level-hint { font-size: 10.5px; }
+  .share-hint { font-size: 10.5px; }
+
+  /* Not suitable card */
+  .not-suitable { padding: 28px 22px 22px; }
+  .not-suitable-text { font-size: 14px; line-height: 1.9; }
+
+  /* iOS 底部安全区 */
+  footer { padding-bottom: max(28px, env(safe-area-inset-bottom)); }
+
+  /* developed shell 在手机上更紧凑 */
+  .developed-shell { padding: 0 12px 32px; }
+}
+
+/* 超窄屏（≤ 380px，老款 iPhone SE / 部分安卓） */
+@media (max-width: 380px) {
+  .title {
+    font-size: 1.95rem;
+    letter-spacing: 0.3em;
+    padding-right: 0.3em;
+  }
+  .subtitle { letter-spacing: 0.32em; }
+  .core-insight-text { font-size: 14.5px; }
+  .step { padding: 14px 12px 16px; }
+  .breadcrumb { padding: 14px 12px 16px; }
+  .alpha-banner { font-size: 10.5px; letter-spacing: 0.02em; }
 }
